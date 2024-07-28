@@ -1,7 +1,6 @@
 using System;
 using System.Diagnostics;
 using System.Drawing;
-
 namespace TelCo.ColorCoder
 {
     class Program
@@ -11,7 +10,6 @@ namespace TelCo.ColorCoder
             TestGetColorFromPairNumber();
             TestGetPairNumberFromColor();
         }
-
         private static void TestGetColorFromPairNumber()
         {
             var tests = new[]
@@ -30,9 +28,6 @@ namespace TelCo.ColorCoder
                 Debug.Assert(result.minorColor == test.minorColor);
             }
         }
-
-       
-
         private static void TestGetPairNumberFromColor()
         {
             var tests = new[]
@@ -42,11 +37,10 @@ namespace TelCo.ColorCoder
                 new { majorColor = Color.Red, minorColor = Color.Blue, expectedPairNumber = 6 },
                 new { majorColor = Color.Black, minorColor = Color.Brown, expectedPairNumber = 14 }
             };
-
             foreach (var test in tests)
             {
                 ColorPair colorPair = new ColorPair() { majorColor = test.majorColor, minorColor = test.minorColor };
-                int result = GetPairNumberFromColor(colorPair);
+                int result = ColorMapper.GetPairNumberFromColor(colorPair);
                 Console.WriteLine($"[In]Colors: {colorPair}, [Out] PairNumber: {result}");
                 Debug.Assert(result == test.expectedPairNumber);
             }
