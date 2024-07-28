@@ -4,68 +4,40 @@ using System.Drawing;
 
 namespace TelCo.ColorCoder
 {
-    /// <summary>
-    /// The 25-pair color code, originally known as even-count color code, 
-    /// is a color code used to identify individual conductors in twisted-pair 
-    /// wiring for telecommunications.
-    /// This class provides the color coding and 
-    /// mapping of pair number to color and color to pair number.
-    /// </summary>
     class Program
     {
-        /// <summary>
-        /// Array of Major colors
-        /// </summary>
-        private static Color[] colorMapMajor;
-        /// <summary>
-        /// Array of minor colors
-        /// </summary>
-        private static Color[] colorMapMinor;
-        /// <summary>
-        /// data type defined to hold the two colors of clor pair
-        /// </summary>
-         internal class ColorPair
+        private static readonly Color[] colorMapMajor;
+        private static readonly Color[] colorMapMinor;
+
+        internal class ColorPair
         {
             internal Color majorColor;
             internal Color minorColor;
+
             public override string ToString()
             {
                 return string.Format("MajorColor:{0}, MinorColor:{1}", majorColor.Name, minorColor.Name);
             }
         }
-        /// <summary>
-        /// Static constructor required to initialize static variable
-        /// </summary>
-       static Program()
+
+        static Program()
         {
             colorMapMajor = new Color[] { Color.White, Color.Red, Color.Black, Color.Yellow, Color.Violet };
             colorMapMinor = new Color[] { Color.Blue, Color.Orange, Color.Green, Color.Brown, Color.SlateGray };
         }
-        /// <summary>
-        /// Given a pair number function returns the major and minor colors in that order
-        /// </summary>
-        /// <param name="pairNumber">Pair number of the color to be fetched</param>
-        /// <returns></returns>
-         public static ColorPair GetColorFromPairNumber(int pairNumber)
+
+        public static ColorPair GetColorFromPairNumber(int pairNumber)
         {
             ValidatePairNumber(pairNumber);
 
-            int minorSize = colorMapMinor.Length;
-            int majorSize = colorMapMajor.Length;
-
             int zeroBasedPairNumber = pairNumber - 1;
-            int majorIndex = zeroBasedPairNumber / minorSize;
-            int minorIndex = zeroBasedPairNumber % minorSize;
+            int majorIndex = zeroBasedPairNumber / colorMapMinor.Length;
+            int minorIndex = zeroBasedPairNumber % colorMapMinor.Length;
 
             return new ColorPair() { majorColor = colorMapMajor[majorIndex], minorColor = colorMapMinor[minorIndex] };
         }
 
-        /// <summary>
-        /// Given the two colors the function returns the pair number corresponding to them
-        /// </summary>
-        /// <param name="pair">Color pair with major and minor color</param>
-        /// <returns></returns>
-         public static int GetPairNumberFromColor(ColorPair pair)
+        public static int GetPairNumberFromColor(ColorPair pair)
         {
             int majorIndex = Array.IndexOf(colorMapMajor, pair.majorColor);
             int minorIndex = Array.IndexOf(colorMapMinor, pair.minorColor);
@@ -88,19 +60,17 @@ namespace TelCo.ColorCoder
             }
         }
 
-        /// <summary>
-        /// Test code for the class
-        /// </summary>
-        /// <param name="args"></param>
         private static void Main(string[] args)
         {
             TestGetColorFromPairNumber();
             TestGetPairNumberFromColor();
         }
-         private static void TestGetColorFromPairNumber()
+
+        private static void TestGetColorFromPairNumber()
         {
             var tests = new[]
             {
+                new { pairNumber = 1, majorColor = Color.White, minorColor = Color.Blue },
                 new { pairNumber = 4, majorColor = Color.White, minorColor = Color.Brown },
                 new { pairNumber = 5, majorColor = Color.White, minorColor = Color.SlateGray },
                 new { pairNumber = 23, majorColor = Color.Violet, minorColor = Color.Green }
@@ -119,8 +89,10 @@ namespace TelCo.ColorCoder
         {
             var tests = new[]
             {
+                new { majorColor = Color.White, minorColor = Color.Blue, expectedPairNumber = 1 },
                 new { majorColor = Color.Yellow, minorColor = Color.Green, expectedPairNumber = 18 },
-                new { majorColor = Color.Red, minorColor = Color.Blue, expectedPairNumber = 6 }
+                new { majorColor = Color.Red, minorColor = Color.Blue, expectedPairNumber = 6 },
+                new { majorColor = Color.Black, minorColor = Color.Brown, expectedPairNumber = 14 }
             };
 
             foreach (var test in tests)
