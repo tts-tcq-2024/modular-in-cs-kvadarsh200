@@ -2,10 +2,10 @@ using System.Drawing;
 
 namespace TelCo.ColorCoder
 {
-    internal class ColorPair
+    public class ColorPair
     {
-        internal Color majorColor;
-        internal Color minorColor;
+        public Color majorColor;
+        public Color minorColor;
 
         public override string ToString()
         {
